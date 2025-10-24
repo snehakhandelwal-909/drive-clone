@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+
+  <style>
+    body {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+                  url("https://lh3.googleusercontent.com/2erv0vmuBi-qH6eLd9nOvjeHTR8eupRBL55dHf1hWc4myVSATZnk-Cfg15I7dRv7LxHFZ1LjLuTeNPg9THsuZRD2eCLYsSYGc3AY=e365-pa-nu-s0-rw") 
+                  no-repeat center center/cover;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      transition: all 0.4s ease-in-out;
+    }
+    .glass:hover {
+      transform: translateY(-5px) scale(1.02);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+    }
+    .file-card {
+      transition: all 0.3s ease;
+    }
+    .file-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .glow-border {
+      border: 2px dashed transparent;
+      background-image: linear-gradient(#111, #111), 
+                        linear-gradient(90deg, #00c6ff, #0072ff, #6a11cb, #2575fc);
+      background-origin: border-box;
+      background-clip: content-box, border-box;
+      animation: glowing 6s linear infinite;
+    }
+    @keyframes glowing {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen text-white py-12 space-y-12">
+
+  <!-- Upload Section -->
+  <div class="glass rounded-3xl p-10 w-full max-w-2xl text-center relative overflow-hidden">
+    <h1 class="text-4xl font-extrabold mb-6 tracking-wide">📤 Upload Your File</h1>
+    <p class="text-gray-300 mb-8">Easily upload and manage your files with style</p>
+    
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <!-- Drag & Drop Box -->
+      <label for="dropzone-file" 
+        class="glow-border flex flex-col items-center justify-center w-full h-64 rounded-2xl cursor-pointer transition duration-300">
+        <div class="flex flex-col items-center justify-center p-6 animate-pulse">
+          <i class="ri-upload-cloud-2-line text-6xl text-blue-300 mb-4"></i>
+          <p class="text-lg font-semibold">Drag & Drop or Click to Upload</p>
+          <p class="text-sm text-gray-300">PNG, JPG, SVG, GIF (max 800x400px)</p>
+        </div>
+        <input id="dropzone-file" type="file" class="hidden" name="file" />
+      </label>
+
+      <!-- Upload Button -->
+      <button class="mt-8 w-full bg-gradient-to-r from-blue-500 to-indigo-600 
+        hover:from-blue-600 hover:to-indigo-700 text-white py-3 px-6 
+        rounded-xl shadow-lg transition transform hover:scale-105 font-semibold tracking-wide">
+        🚀 Upload File
+      </button>
+    </form>
+  </div>
+
+  <!-- Previous Files Section -->
+  <div class="glass rounded-3xl p-8 w-full max-w-3xl">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+      <i class="ri-folder-2-line text-yellow-300"></i> Your Files
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <% files.forEach(file => { %>
+        <div class="file-card p-5 rounded-xl border border-white/20 flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg font-semibold truncate"><%= file.originalName %></h3>
+            <p class="text-sm text-gray-300">Size: <%= file.size %> KB</p>
+          </div>
+          <a href="/download/<%= file.path %>" 
+            class="mt-4 inline-block text-blue-400 hover:text-blue-300 hover:underline transition">
+            ⬇ Download
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+</body>
+</html>

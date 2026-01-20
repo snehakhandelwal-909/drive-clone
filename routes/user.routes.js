@@ -31,10 +31,10 @@ router.post('/register',
 router.get('/login',(req,res)=>{
     res.render('login');
 });
-router.post('/login',async (req,res)=>{
-    body('email').trim().isEmail().withMessage('Invalid email address');
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long');
-
+router.post('/login',
+    body('email').trim().isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    async (req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array(), message: 'Invalid Data' });
